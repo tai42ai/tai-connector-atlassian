@@ -1,0 +1,34 @@
+name: Bug report
+description: Report a defect in tai-connector-atlassian (pure descriptor data — the Atlassian ProviderDescriptor)
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps or code that reproduce the problem (e.g. an import that fails, a descriptor that won't validate, a wrong scope or OAuth endpoint, a registration that does not fire).
+      render: python
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: tai-connector-atlassian version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Python version, OS, tai-contract version, and (for type-checking issues) pyright version.
+      placeholder: "Python 3.13.x, macOS 15, tai-contract 0.1.x"
+    validations:
+      required: true
