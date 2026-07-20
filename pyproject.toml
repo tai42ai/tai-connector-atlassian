@@ -3,9 +3,9 @@ requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tai-connector-atlassian"
+name = "tai42-connector-atlassian"
 version = "0.1.0"
-description = "Atlassian (Jira, Confluence, Compass) OAuth connector provider for the TAI ecosystem. Pure descriptor data; depends only on tai-contract."
+description = "Atlassian (Jira, Confluence, Compass) OAuth connector provider for the TAI ecosystem. Pure descriptor data; depends only on tai42-contract."
 readme = "README.md"
 requires-python = ">=3.13"
 license = "Apache-2.0"
@@ -25,8 +25,8 @@ classifiers = [
 dependencies = [
     # The pure interface contract — this plugin's only dependency. It imports no
     # application package: the provider is pure descriptor data registered through
-    # the tai_app handle.
-    "tai-contract>=0.1,<0.2",
+    # the tai42_app handle.
+    "tai42-contract>=0.1,<0.2",
 ]
 
 [project.urls]
@@ -53,14 +53,20 @@ package-dir = { "" = "src" }
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = true
-include = ["tai_connector*"]
+include = ["tai42_connector*"]
 
 [tool.setuptools.package-data]
-"tai_connector.atlassian" = ["py.typed", "tai-plugin.yml"]
+"tai42_connector.atlassian" = ["py.typed", "tai-plugin.yml"]
 
 [tool.uv]
 cache-keys = [{ file = "pyproject.toml" }]
 
+
+# The version floors in [project] are the compatibility contract; these path
+# sources resolve the sibling checkouts while the packages are unpublished.
+# They are not part of wheel metadata.
+[tool.uv.sources]
+tai42-contract = { path = "../tai-contract", editable = true }
 [tool.ruff]
 src = ["src"]
 target-version = "py313"
@@ -70,8 +76,8 @@ line-length = 120
 select = ["E", "W", "F", "I", "UP", "B", "C4", "SIM", "PIE", "PT", "RUF", "TID"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
-"tai_kit".msg = "connectors depend on tai-contract only, never tai-kit."
-"tai_skeleton".msg = "connectors depend on tai-contract only, never tai-skeleton."
+"tai42_kit".msg = "connectors depend on tai42-contract only, never tai42-kit."
+"tai42_skeleton".msg = "connectors depend on tai42-contract only, never tai42-skeleton."
 
 [tool.pytest.ini_options]
 xfail_strict = true
@@ -79,7 +85,7 @@ testpaths = ["tests"]
 filterwarnings = ["error"]
 
 [tool.coverage.run]
-source = ["tai_connector"]
+source = ["tai42_connector"]
 
 [tool.coverage.report]
 fail_under = 97
@@ -88,6 +94,6 @@ fail_under = 97
 include = ["src", "tests"]
 pythonVersion = "3.13"
 typeCheckingMode = "strict"
-# tai-contract resolves via a dev-time editable path install pyright can't follow;
+# tai42-contract resolves via a dev-time editable path install pyright can't follow;
 # a missing-import is a warning, not an error.
 reportMissingImports = "warning"

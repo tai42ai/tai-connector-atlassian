@@ -7,11 +7,11 @@ import tomllib
 from pathlib import Path
 
 import yaml
-from tai_contract.plugins import PluginSpec
+from tai42_contract.plugins import PluginSpec
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _ROOT_SPEC = _REPO_ROOT / "tai-plugin.yml"
-_PACKAGED_SPEC = _REPO_ROOT / "src" / "tai_connector" / "atlassian" / "tai-plugin.yml"
+_PACKAGED_SPEC = _REPO_ROOT / "src" / "tai42_connector" / "atlassian" / "tai-plugin.yml"
 
 
 def _spec() -> PluginSpec:
@@ -42,4 +42,4 @@ def test_spec_is_declared_in_package_data():
         "package-data"
     ]
     declaring = [key for key, files in package_data.items() if "tai-plugin.yml" in files]
-    assert declaring == ["tai_connector.atlassian"], declaring
+    assert declaring == ["tai42_connector.atlassian"], declaring

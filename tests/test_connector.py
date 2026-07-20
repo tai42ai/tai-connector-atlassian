@@ -3,7 +3,7 @@
 Self-contained: the descriptor constructs and re-validates against the contract
 ``ProviderDescriptor`` (http MCP-server sub-services exercise the launch-spec XOR
 on the ``mcp_server`` side), and loading the module registers exactly that
-descriptor through the ``tai_app`` handle. No private dependency.
+descriptor through the ``tai42_app`` handle. No private dependency.
 """
 
 from __future__ import annotations
@@ -12,10 +12,10 @@ import importlib
 from collections.abc import Iterator
 
 import pytest
-from tai_contract.app import tai_app
-from tai_contract.connectors.providers import ProviderDescriptor
+from tai42_contract.app import tai42_app
+from tai42_contract.connectors.providers import ProviderDescriptor
 
-from tai_connector.atlassian.core import connector as connector_mod
+from tai42_connector.atlassian.core import connector as connector_mod
 from tests import conftest
 
 ATLASSIAN_MCP_URL = "https://mcp.atlassian.com/v1/mcp/authv2"
@@ -26,7 +26,7 @@ def restore_tai_app() -> Iterator[None]:
     """Snapshot the bound app impl and the recorded registrations, then restore
     both and reload the connector module on teardown.
 
-    The wrapped test rebinds ``tai_app`` to a throwaway fake and reloads the
+    The wrapped test rebinds ``tai42_app`` to a throwaway fake and reloads the
     connector to re-run its import-time registration. Without this fixture that
     binding — and the extra registration the reload-back appends — would leak into
     every later test. Restoring the bound impl and ``conftest.REGISTERED``
@@ -34,14 +34,14 @@ def restore_tai_app() -> Iterator[None]:
 
     The bound impl is read via ``object.__getattribute__`` — the same way the
     forwarding handle reads its own ``_impl`` slot — because the public
-    ``tai_app`` type exposes only ``bind`` and the app namespaces, not the slot.
+    ``tai42_app`` type exposes only ``bind`` and the app namespaces, not the slot.
     """
-    saved_impl = object.__getattribute__(tai_app, "_impl")
+    saved_impl = object.__getattribute__(tai42_app, "_impl")
     saved_registered = list(conftest.REGISTERED)
     try:
         yield
     finally:
-        tai_app.bind(saved_impl)
+        tai42_app.bind(saved_impl)
         importlib.reload(connector_mod)
         conftest.REGISTERED[:] = saved_registered
 
@@ -174,7 +174,7 @@ def test_registration_invokes_handle(restore_tai_app: None) -> None:
     class FakeApp:
         connectors = FakeConnectors()
 
-    tai_app.bind(FakeApp())
+    tai42_app.bind(FakeApp())
     # Reloading re-runs the module-level registration against the fake handle —
     # exactly what the manifest triggers when it loads the plugin.
     importlib.reload(connector_mod)

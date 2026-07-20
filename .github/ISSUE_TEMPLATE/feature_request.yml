@@ -1,18 +1,18 @@
 name: Feature request
-description: Propose an addition or change to the tai-connector-atlassian descriptor
+description: Propose an addition or change to the tai42-connector-atlassian descriptor
 labels: ["enhancement"]
 body:
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: What should be added or changed, and what problem does it solve? Remember the ground rule — pure descriptor data only, no behaviour, and tai-contract is the only dependency.
+      description: What should be added or changed, and what problem does it solve? Remember the ground rule — pure descriptor data only, no behaviour, and tai42-contract is the only dependency.
     validations:
       required: true
   - type: input
     id: version
     attributes:
-      label: tai-connector-atlassian version
+      label: tai42-connector-atlassian version
       description: The version you are using, if relevant.
       placeholder: "0.1.0"
     validations:

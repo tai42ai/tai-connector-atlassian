@@ -1,14 +1,14 @@
-# Contributing to tai-connector-atlassian
+# Contributing to tai42-connector-atlassian
 
 This repo ships the **Atlassian** connector provider as **pure descriptor data**.
-The one rule that shapes everything: **no behaviour, and `tai-contract` is the
+The one rule that shapes everything: **no behaviour, and `tai42-contract` is the
 only dependency.**
 
 ## Ground rules
 
-- **Depend on `tai-contract` only.** No other tai-* package, no skeleton import. The
-  registration goes through the runtime handle: `from tai_contract.app import
-  tai_app`, then `tai_app.connectors.register_connector(descriptor)`.
+- **Depend on `tai42-contract` only.** No other tai-* package, no skeleton import. The
+  registration goes through the runtime handle: `from tai42_contract.app import
+  tai42_app`, then `tai42_app.connectors.register_connector(descriptor)`.
 - **No OAuth / probe / launch code.** All of that is generic in the connector
   engine, keyed off the descriptor. This plugin declares one
   `ProviderDescriptor` and nothing more.
@@ -19,13 +19,13 @@ only dependency.**
 
 ## Layout
 
-- `src/tai_connector/atlassian/core/connector.py` — builds the
-  `ProviderDescriptor` and registers it on import. `tai_connector` is a namespace
+- `src/tai42_connector/atlassian/core/connector.py` — builds the
+  `ProviderDescriptor` and registers it on import. `tai42_connector` is a namespace
   package, so each provider ships in its own repo under the shared namespace.
-- `src/tai_connector/atlassian/tai-plugin.yml` — the plugin manifest.
+- `src/tai42_connector/atlassian/tai-plugin.yml` — the plugin manifest.
 - **`tests/test_connector.py`** — the descriptor constructs and validates against
   the contract `ProviderDescriptor`, and loading the module registers it through
-  the `tai_app` handle. **No private dependency.**
+  the `tai42_app` handle. **No private dependency.**
 - **`tests/test_plugin_spec.py`** — the shipped plugin manifest's shape.
 
 ## Dev

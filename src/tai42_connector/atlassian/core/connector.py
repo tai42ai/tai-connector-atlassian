@@ -1,7 +1,7 @@
 """Atlassian connector provider — Jira, Confluence, and Compass.
 
 A pure-data provider plugin: it declares one :class:`ProviderDescriptor` and
-registers it through the ``tai_app`` handle when the manifest loads this module.
+registers it through the ``tai42_app`` handle when the manifest loads this module.
 All OAuth / probe / launch behaviour is generic in the connector engine, keyed
 off this descriptor — the plugin carries no behaviour of its own.
 
@@ -16,8 +16,8 @@ vars (``CONNECTORS_ATLASSIAN_CLIENT_ID`` / ``CONNECTORS_ATLASSIAN_CLIENT_SECRET`
 
 from __future__ import annotations
 
-from tai_contract.app import tai_app
-from tai_contract.connectors.providers import (
+from tai42_contract.app import tai42_app
+from tai42_contract.connectors.providers import (
     McpServerDescriptor,
     OAuthEndpoints,
     ProviderDescriptor,
@@ -126,6 +126,6 @@ def build_descriptor() -> ProviderDescriptor:
 
 
 # Manifest-loaded registration: importing this module registers the provider
-# through the runtime app handle. The manifest binds ``tai_app`` before loading
+# through the runtime app handle. The manifest binds ``tai42_app`` before loading
 # plugins, so the handle resolves; loading the module is the registration.
-tai_app.connectors.register_connector(build_descriptor())
+tai42_app.connectors.register_connector(build_descriptor())
