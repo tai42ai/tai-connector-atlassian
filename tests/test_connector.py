@@ -1,10 +1,4 @@
-"""Tests for the Atlassian connector provider.
-
-Self-contained: the descriptor constructs and re-validates against the contract
-``ProviderDescriptor`` (http MCP-server sub-services exercise the launch-spec XOR
-on the ``mcp_server`` side), and loading the module registers exactly that
-descriptor through the ``tai42_app`` handle. No private dependency.
-"""
+"""Tests for the Atlassian connector provider."""
 
 from __future__ import annotations
 
@@ -23,19 +17,10 @@ ATLASSIAN_MCP_URL = "https://mcp.atlassian.com/v1/mcp/authv2"
 
 @pytest.fixture
 def restore_tai_app() -> Iterator[None]:
-    """Snapshot the bound app impl and the recorded registrations, then restore
-    both and reload the connector module on teardown.
-
-    The wrapped test rebinds ``tai42_app`` to a throwaway fake and reloads the
-    connector to re-run its import-time registration. Without this fixture that
-    binding — and the extra registration the reload-back appends — would leak into
-    every later test. Restoring the bound impl and ``conftest.REGISTERED``
-    leaves global state exactly as the suite found it, order-independently.
-
-    The bound impl is read via ``object.__getattribute__`` — the same way the
-    forwarding handle reads its own ``_impl`` slot — because the public
-    ``tai42_app`` type exposes only ``bind`` and the app namespaces, not the slot.
-    """
+    """Snapshot the bound app impl and recorded registrations, then restore both
+    and reload the connector on teardown so a test's rebind does not leak into
+    later tests. The impl is read via ``object.__getattribute__`` — the public
+    handle exposes no accessor for its ``_impl`` slot."""
     saved_impl = object.__getattribute__(tai42_app, "_impl")
     saved_registered = list(conftest.REGISTERED)
     try:
@@ -73,8 +58,7 @@ def test_descriptor_constructs_and_validates() -> None:
 
 
 def test_descriptor_passes_contract_validation() -> None:
-    """Re-validating a dump re-runs every field/model validator — the launch-spec
-    XOR, the oauth invariants, and the non-empty scopes rule — proving the built
+    """Re-validating a dump re-runs every field/model validator, proving the
     descriptor is contract-valid, not merely constructible."""
     descriptor = connector_mod.build_descriptor()
     revalidated = ProviderDescriptor.model_validate(descriptor.model_dump())
@@ -175,8 +159,7 @@ def test_registration_invokes_handle(restore_tai_app: None) -> None:
         connectors = FakeConnectors()
 
     tai42_app.bind(FakeApp())
-    # Reloading re-runs the module-level registration against the fake handle —
-    # exactly what the manifest triggers when it loads the plugin.
+    # Reloading re-runs the module-level registration against the fake handle.
     importlib.reload(connector_mod)
 
     assert len(captured) == 1
